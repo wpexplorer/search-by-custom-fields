@@ -18,15 +18,15 @@ final class Search_By_Custom_Fields {
 	 * Class constructor.
 	 */
 	public function __construct() {
-		add_filter( 'posts_join', [ $this, 'filter_search_join' ], 10, 2 );
-		add_filter( 'posts_where', [ $this, 'filter_search_where_clause' ], 10, 2 );
+		add_filter( 'posts_join', [ $this, 'filter_posts_join' ], 10, 2 );
+		add_filter( 'posts_where', [ $this, 'filter_posts_where' ], 10, 2 );
 		add_filter( 'posts_distinct', [ $this, 'filter_posts_distinct' ], 10, 2 );
 	}
 
 	/**
 	 * Adds the postmeta table to the search query.
 	 */
-	public function filter_search_join( $join, $query ) {
+	public function filter_posts_join( $join, $query ) {
 		if ( $query->is_search() ) {
 			global $wpdb;
 			$join .= " LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id";
@@ -37,7 +37,7 @@ final class Search_By_Custom_Fields {
 	/**
 	 * Adds meta values to the search query.
 	 */
-	public function filter_search_where_clause( $where, $query ) {
+	public function filter_posts_where( $where, $query ) {
 		if ( $query->is_search() ) {
 			global $wpdb;
 			$where = preg_replace(
